@@ -1,0 +1,61 @@
+volumes:
+  db-pgsql-data:
+  redis:
+
+services:
+  # ------------------------------ DATABASES ------------------------------
+  db-pgsql:
+    image: postgres:16.0-alpine3.18
+    restart: unless-stopped
+    ports:
+      - '${BASE_IP_MAPPING}.2:5432:5432'
+    environment:
+      POSTGRES_PASSWORD: '${DB_PASSWORD}'
+    volumes:
+      - type: volume
+        source: db-pgsql-data
+        target: /var/lib/postgresql/data
+  redis:
+    image: redis:7.2.2-alpine3.18
+    restart: unless-stopped
+    volumes:
+      - type: volume
+        source: redis
+        target: /data
+    ports:
+      - '${BASE_IP_MAPPING}.25:6379:6379'
+  # --------------------------------- APP ----------------------------------
+  api:
+    build:
+      context: '${REPO_DIRECTORY}/${BACKEND_DIRECTORY}'
+      dockerfile: Dockerfile
+      args:
+        USER: '${USER}'
+    restart: unless-stopped
+    depends_on:
+      - db-pgsql
+      - redis
+    volumes:
+      - type: bind
+        source: '${REPO_DIRECTORY}/${BACKEND_DIRECTORY}/src'
+        target: /home/app/api/src
+    env_file:
+      - '${REPO_DIRECTORY}/${BACKEND_DIRECTORY}/.env'
+    ports:
+      - '${BASE_IP_MAPPING}.3:3000:3000'
+      - 9229:9229
+  front:
+    build:
+      context: '${REPO_DIRECTORY}/${FRONTEND_DIRECTORY}'
+      dockerfile: Dockerfile
+      args:
+        USER: '${USER}'
+    restart: unless-stopped
+    ports:
+      - '${BASE_IP_MAPPING}.1:80:80'
+    depends_on:
+      - api
+    volumes:
+      - type: bind
+        source: '${REPO_DIRECTORY}/${FRONTEND_DIRECTORY}/src'
+        target: /home/app/src

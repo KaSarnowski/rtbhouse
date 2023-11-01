@@ -1,0 +1,22 @@
+<ng-template [ngIf]="!userStats">
+  <div class="spinner-border text-primary" role="status">
+    <span class="sr-only">Please wait, stats are loading...</span>
+  </div>
+</ng-template>
+
+<ng-template [ngIf]="userStats">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Number of users who accessed the initial page</th>
+        <th scope="col">Percentage of users who scrolled to the image</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ userStats.totalUsers }}</td>
+        <td>{{ userStats.percentageAvatarsSeen }}%</td>
+      </tr>
+    </tbody>
+  </table>
+</ng-template>

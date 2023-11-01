@@ -1,0 +1,37 @@
+<div class="content">
+  <h2>Lorem ipsum</h2>
+  <ng-template [ngIf]="isLoremIpsumLoaded">
+    <p>Here are some lorem ipsum to keep you entertained:</p>
+  </ng-template>
+  <ng-template [ngIf]="!isLoremIpsumLoaded">
+    <p>The greatest text known to mankind - Lorem Ipsum - is loading, please wait.</p>
+  </ng-template>
+
+  <ng-template [ngIf]="isLoremIpsumLoaded">
+
+    <ng-template ngFor let-lorem [ngForOf]="loremIpsum" let-i="index">
+      <ng-template [ngIf]="i === 10">
+        <img [id]="trackedAvatarId" [ngSrc]="userAvatarUrl" height="300" width="300" alt="user avatar"/>
+      </ng-template>
+      <p>({{i+1}}) -
+        <ng-template [ngIf]="i === 0" *ngFor="let singleLine of loremIpsum"> <!-- We want to start the first paragraph with a nice "Lorem ipsum dolor sit amet", not a random part -->
+          {{singleLine}}<br>
+        </ng-template>
+        <ng-template [ngIf]="i !== 0" *ngFor="let singleLine of getShuffledLoremIpsum(i)">
+          {{singleLine}}<br>
+        </ng-template>
+      </p>
+    </ng-template>
+  </ng-template>
+</div>
+
+<div class="content">
+  <h2>Congratulations, you have reached the end!</h2>
+  <p>What do you want to do next?</p>
+</div>
+
+<div class="card-container">
+  <button class="card card-small" [routerLink]="['/stats']" tabindex="0">
+    <span>Show me the stats!</span>
+  </button>
+</div>
