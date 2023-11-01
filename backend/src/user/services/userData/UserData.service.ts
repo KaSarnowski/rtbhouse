@@ -45,7 +45,7 @@ export class UserDataService implements IUserDataService {
     };
   }
   private getPercentage(base: number, divider: number): number {
-    return math.multiply(math.divide(base, divider), 100);
+    return math.round(math.multiply(math.divide(base, divider), 100));
   }
   private async createNewInternalUser(
     randomUserData: IRandomUserData,
