@@ -24,7 +24,9 @@ export class UserDataController {
     const userData: IUserData = await this._userDataService.getNewUserData();
     return {
       ...userData,
-      token: this._jwtService.generateToken({ id: userData.id }),
+      token: this._jwtService.generateToken<IUserRequestData>({
+        id: userData.id,
+      }),
     };
   }
 

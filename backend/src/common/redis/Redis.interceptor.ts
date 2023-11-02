@@ -11,10 +11,10 @@ import { IRedisConnectionPool } from './IRedisConnectionPool';
 
 export class RedisInterceptor implements NestInterceptor {
   constructor(
-    @Inject(`IRedisClient`)
+    @Inject(`RedisClient`)
     private readonly _redisClient: IRedisClient,
 
-    @Inject(`IRedisConnectionPool`)
+    @Inject(`RedisConnectionPool`)
     private readonly _redisConnectionPool: IRedisConnectionPool,
   ) {}
 

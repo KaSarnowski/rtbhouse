@@ -9,19 +9,19 @@ import { IRedisClient } from './IRedisClient';
 @Module({
   providers: [
     {
-      provide: `IRedisClientFactory`,
+      provide: `RedisClientFactory`,
       useClass: RedisClientFactory,
     },
     {
-      provide: `IRedisConnectionPool`,
+      provide: `RedisConnectionPool`,
       useClass: RedisConnectionPool,
     },
     {
       scope: Scope.REQUEST,
-      provide: `IRedisClient`,
+      provide: `RedisClient`,
       useFactory: (redisConnectionPool: RedisConnectionPool): IRedisClient =>
         redisConnectionPool.get(),
-      inject: [`IRedisConnectionPool`],
+      inject: [`RedisConnectionPool`],
     },
     {
       scope: Scope.REQUEST,
@@ -29,6 +29,6 @@ import { IRedisClient } from './IRedisClient';
       useClass: RedisInterceptor,
     },
   ],
-  exports: [`IRedisClient`],
+  exports: [`RedisClient`],
 })
 export class RedisClientModule {}

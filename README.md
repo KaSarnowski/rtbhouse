@@ -24,6 +24,9 @@ $ docker compose up -d
 # Accessing the app
 if everything went fine, the app should be accessible at `http://127.0.2.1/`
 
+# "Adding" new users
+The easiest way to add a new user is to open new page in incognito mode - it opens a new browser session, otherwise one user will be "logged in" for an hour, or until a session closes.
+
 ## Stay in touch
 
 - Author - [Kamil Sarnowski](https://www.linkedin.com/in/kamil-sarnowski-developer/)

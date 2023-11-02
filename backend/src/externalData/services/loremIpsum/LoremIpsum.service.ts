@@ -8,7 +8,7 @@ export class LoremIpsumService implements ILoremIpsumService {
     @Inject('HttpClient')
     private readonly _httpClient: IHttpClient,
 
-    @Inject('IRedisClient')
+    @Inject('RedisClient')
     private readonly _redisClient: IRedisClient,
   ) {}
 
@@ -19,9 +19,11 @@ export class LoremIpsumService implements ILoremIpsumService {
     );
 
     const loremIpsum: string[] =
-      cachedLoremIpsum ?? (await this.getNewLoremIpsum(lines));
+      cachedLoremIpsum.length > 0
+        ? cachedLoremIpsum
+        : await this.getNewLoremIpsum(lines);
 
-    if (loremIpsum) {
+    if (cachedLoremIpsum.length === 0 && loremIpsum.length > 0) {
       await this.cacheLoremIpsum(userId, lines, loremIpsum);
     }
     return loremIpsum;
@@ -31,7 +33,7 @@ export class LoremIpsumService implements ILoremIpsumService {
     try {
       const rawLoremIpsum: string | undefined = (
         await this._httpClient.get<string>(
-          `https://loripsum.net/api/${lines}/short/prude/plaintext`,
+          `${process.env.BASE_LOREM_IPSUM_API_URL}/${lines}/short/prude/plaintext`,
         )
       )?.data;
       if (!rawLoremIpsum) {
@@ -48,9 +50,11 @@ export class LoremIpsumService implements ILoremIpsumService {
   private async getCachedLoremIpsum(
     userId: number,
     lines: number,
-  ): Promise<any> {
-    return await this._redisClient.getValue<any>(
-      `loremIpsum_${userId}_${lines}`,
+  ): Promise<string[]> {
+    return (
+      (await this._redisClient.getValue<string[]>(
+        `loremIpsum_${userId}_${lines}`,
+      )) || []
     );
   }
 

@@ -20,3 +20,6 @@
   background-color: #4caf50;
   transition: width 0.3s;
 }
+.table td {
+  text-align: center;
+}

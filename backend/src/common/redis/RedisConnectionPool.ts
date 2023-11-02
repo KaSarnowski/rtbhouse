@@ -10,7 +10,7 @@ export class RedisConnectionPool implements IRedisConnectionPool {
   private readonly _freeRedisConnections: RedisClientPool[] = [];
 
   constructor(
-    @Inject('IRedisClientFactory')
+    @Inject('RedisClientFactory')
     private readonly _redisClientFactory: IRedisClientFactory,
   ) {
     const redisMaxConnectionPool: number = parseInt(
